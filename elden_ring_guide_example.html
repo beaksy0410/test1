@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>틈새의 땅 — 모험 기록</title>
+<style>
+  :root {
+    --bg: #11110f; --panel: #1b1a17; --panel2: #23211c;
+    --gold: #c8a85b; --gold-soft: #8d7742; --text: #e8e1d2;
+    --muted: #aaa18e; --line: #39352b; --green: #9bb18b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: radial-gradient(ellipse at top, #282316 0, var(--bg) 48%);
+    color: var(--text); font-family: "Noto Serif KR", Georgia, serif; line-height: 1.65;
+  }
+  header { padding: 42px 22px 30px; text-align: center; border-bottom: 1px solid var(--line); }
+  .eyebrow { color: var(--gold); letter-spacing: .22em; font-size: .78rem; }
+  h1 { margin: 8px 0; font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 500; letter-spacing: .08em; }
+  header p { color: var(--muted); margin: 0; }
+  .layout { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 24px; max-width: 1180px; margin: 28px auto; padding: 0 20px; }
+  aside, .card { background: rgba(27,26,23,.94); border: 1px solid var(--line); border-radius: 8px; }
+  aside { padding: 18px; align-self: start; position: sticky; top: 16px; }
+  aside h2 { color: var(--gold); font-size: .9rem; letter-spacing: .12em; margin: 0 0 12px; }
+  nav { display: grid; gap: 6px; }
+  nav button { background: transparent; color: var(--muted); border: 1px solid transparent; text-align: left; padding: 9px 10px; border-radius: 5px; cursor: pointer; font: inherit; }
+  nav button:hover, nav button.active { color: var(--gold); background: #2a261c; border-color: #51452b; }
+  main { min-width: 0; }
+  .hero { padding: 25px; margin-bottom: 18px; background: linear-gradient(120deg, #302819, #1b1a17 70%); border: 1px solid #55452a; border-radius: 8px; }
+  .cover-image { width: 100%; height: clamp(190px, 32vw, 340px); object-fit: cover; display: block; border-radius: 6px; margin: 0 0 18px; border: 1px solid #55452a; }
+  .region-image, .boss-image { width: 100%; height: 170px; object-fit: cover; display: block; border-radius: 5px; margin: 0 0 13px; background: #242118; }
+  .image-caption { color: #8e8675; font: .72rem/1.5 sans-serif; margin: -9px 0 12px; }
+  .image-caption a, .credits a { color: #c8a85b; text-decoration: none; }
+  .image-caption a:hover, .credits a:hover { text-decoration: underline; }
+  .credits { color: #817967; font: .78rem/1.8 sans-serif; max-width: 1180px; margin: 0 auto; padding: 0 20px 24px; }
+  .hero small { color: var(--gold); letter-spacing: .15em; }
+  .hero h2 { margin: 4px 0 8px; font-size: 1.7rem; font-weight: 500; }
+  .hero p { margin: 0; color: #c8bfad; }
+  .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 20px; }
+  .stat { padding: 12px; background: #171612; border: 1px solid var(--line); border-radius: 6px; }
+  .stat strong { display: block; color: var(--gold); font-size: 1.1rem; }
+  .stat span { color: var(--muted); font-size: .82rem; }
+  .grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+  .card { padding: 19px; }
+  .card h3 { margin: 0 0 10px; color: var(--gold); font-size: 1.08rem; font-weight: 500; }
+  .card p { margin: 0 0 10px; color: #c8bfad; }
+  .tag { display: inline-block; font: .75rem sans-serif; color: var(--green); border: 1px solid #46533d; border-radius: 99px; padding: 2px 8px; margin: 0 5px 5px 0; }
+  .checklist { display: grid; gap: 10px; }
+  label { display: flex; align-items: flex-start; gap: 9px; cursor: pointer; color: #d8d0c0; }
+  input[type=checkbox] { accent-color: var(--gold); margin-top: 6px; }
+  .done { color: #8e927e; text-decoration: line-through; }
+  .boss { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); padding: 10px 0; }
+  .boss:last-child { border-bottom: 0; }
+  .difficulty { color: var(--gold); white-space: nowrap; font-size: .82rem; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .search { width: 100%; padding: 11px 13px; background: #151410; color: var(--text); border: 1px solid var(--line); border-radius: 5px; font: inherit; margin-bottom: 14px; }
+  footer { text-align: center; padding: 24px; color: #817967; border-top: 1px solid var(--line); font-size: .8rem; }
+  @media(max-width: 720px) {
+    .layout { grid-template-columns: 1fr; }
+    aside { position: static; }
+    nav { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .grid { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">A TARNISHED'S JOURNAL</div>
+  <h1>틈새의 땅</h1>
+  <p>빛바랜 자의 모험 기록 · 개인용 가이드북</p>
+</header>
+
+<div class="layout">
+  <aside>
+    <h2>기록 목차</h2>
+    <nav>
+      <button class="active" data-page="home">✦ 모험 개요</button>
+      <button data-page="regions">⌖ 지역 공략</button>
+      <button data-page="bosses">⚔ 보스 도감</button>
+      <button data-page="checklist">☑ 진행 체크리스트</button>
+    </nav>
+  </aside>
+
+  <main>
+    <section id="home" class="page active">
+      <img class="cover-image" src="https://images.cgames.de/images/gamestar/226/elden-ring-pc-screenshots_6170607.jpg" alt="림그레이브의 광활한 풍경을 바라보는 빛바랜 자" onerror="this.style.display='none'">
+      <p class="image-caption">림그레이브 풍경 이미지 · <a href="https://www.gamestar.de/artikel/elden-ring-acht-haertesten-bosse-verzweifelt%2C3378728.html" target="_blank" rel="noopener">이미지 출처</a></p>
+      <div class="hero">
+        <small>JOURNAL · 01</small>
+        <h2>다시, 엘든 링을 향하여</h2>
+        <p>황금의 축복을 따라 미지의 땅을 탐험하라. 이 기록은 발견한 장소와 마주한 적, 아직 끝내지 못한 일을 정리하기 위한 나만의 안내서다.</p>
+        <div class="stats">
+          <div class="stat"><strong>4</strong><span>기록할 주요 지역</span></div>
+          <div class="stat"><strong>3</strong><span>등록된 주요 보스</span></div>
+          <div class="stat"><strong id="progress">0%</strong><span>체크리스트 진행도</span></div>
+        </div>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <h3>✧ 탐험의 원칙</h3>
+          <p>길이 막혔다면 다른 길을 찾고, 강적을 만났다면 장비와 전투 방식을 점검한다.</p>
+          <span class="tag">탐험</span><span class="tag">성장</span><span class="tag">재도전</span>
+        </article>
+        <article class="card">
+          <h3>📜 다음 목표</h3>
+          <div class="checklist">
+            <label><input type="checkbox" class="task"> 림그레이브의 주요 축복 발견</label>
+            <label><input type="checkbox" class="task"> 무기 강화 재료 수집</label>
+            <label><input type="checkbox" class="task"> 첫 번째 주요 보스 격파</label>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="regions" class="page">
+      <div class="hero">
+        <small>FIELD NOTES · 02</small>
+        <h2>지역 공략</h2>
+        <p>지역 이름을 선택하듯 기록을 읽고, 탐험하면서 얻은 정보를 덧붙여 보자.</p>
+      </div>
+      <input class="search" id="regionSearch" placeholder="지역 검색… (예: 림그레이브)">
+      <div class="grid" id="regionCards">
+        <article class="card searchable">
+          <img class="region-image" src="https://images.cgames.de/images/gamestar/226/elden-ring-pc-screenshots_6170607.jpg" alt="림그레이브의 들판과 유적" loading="lazy" onerror="this.style.display='none'">
+          <p class="image-caption">풍경 이미지 · <a href="https://www.gamestar.de/artikel/elden-ring-acht-haertesten-bosse-verzweifelt%2C3378728.html" target="_blank" rel="noopener">출처</a></p>
+          <h3>림그레이브</h3><span class="tag">초반 지역</span>
+          <p>넓은 들판과 폐허가 펼쳐진 시작 지역. 초반에는 지도를 찾고 축복을 활성화하며 주변을 천천히 살펴보자.</p>
+          <p><strong>탐험 메모:</strong> 밤이나 날씨에 따라 적과 마주치는 상황이 달라질 수 있다.</p>
+        </article>
+        <article class="card searchable">
+          <img class="region-image" src="https://cdn.mos.cms.futurecdn.net/SaUeLJ6jFeedLhpgE2nzfk.png" alt="밤하늘 아래 황금빛 축복" loading="lazy" onerror="this.style.display='none'">
+          <p class="image-caption">게임 스크린샷 · <a href="https://www.techradar.com/how-to/elden-ring-trophy-guide-all-41-achievements-revealed" target="_blank" rel="noopener">출처</a></p>
+          <h3>흐느낌의 반도</h3><span class="tag">선택 탐험</span>
+          <p>림그레이브 남쪽의 반도. 주 진행이 어렵게 느껴질 때 장비와 레벨을 보강하기 위해 둘러보기 좋은 선택지다.</p>
+          <p><strong>탐험 메모:</strong> 길을 따라 남쪽으로 이동하며 축복과 던전을 확인하자.</p>
+        </article>
+        <article class="card searchable">
+          <img class="region-image" src="https://arabhardware.net/storage/uploads/2022-02/elden-ring-20220217162038main62193e8ed4354.jpg" alt="폭풍우 아래 우뚝 솟은 스톰빌 성" loading="lazy" onerror="this.style.display='none'">
+          <p class="image-caption">성 외관 이미지 · <a href="https://arabhardware.net/articles/elden-ring-open-world-guide" target="_blank" rel="noopener">출처</a></p>
+          <h3>스톰빌 성</h3><span class="tag">레거시 던전</span>
+          <p>복잡한 지형과 여러 갈래 길이 특징인 성. 막다른 길처럼 보여도 주변의 난간과 샛길을 살펴보자.</p>
+          <p><strong>탐험 메모:</strong> 발견한 지름길과 문 위치를 적어두면 재탐험이 편해진다.</p>
+        </article>
+        <article class="card searchable">
+          <img class="region-image" src="https://collegehill.io/wp-content/uploads/2022/03/Landscape-Liurnia-of-the-Lakes.jpg" alt="호수의 리에니에 풍경" loading="lazy" onerror="this.style.display='none'">
+          <p class="image-caption">지역 풍경 이미지 · <a href="https://collegehill.io/virtual-photography/elden-ring-landscapes/" target="_blank" rel="noopener">스크린샷 모음 출처</a></p>
+          <h3>호수의 리에니에</h3><span class="tag">중반 탐험</span>
+          <p>넓은 호수와 마법 관련 장소가 등장하는 지역. 적의 공격 속성과 지형을 고려해 접근 경로를 정하자.</p>
+          <p><strong>탐험 메모:</strong> 지도 조각을 먼저 찾으면 이동 계획을 세우기 쉽다.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="bosses" class="page">
+      <div class="hero">
+        <small>ENEMY ARCHIVE · 03</small>
+        <h2>보스 도감</h2>
+        <p>패턴, 약점, 추천 장비를 직접 기록해 두는 공간. 난이도 표시는 개인적인 체감 기준이다.</p>
+      </div>
+      <div class="card">
+        <img class="boss-image" src="https://www.famitsu.com/images/000/253/782/y_6225e0bb66198.jpg" alt="멀기트와 대치하는 전투 장면" loading="lazy" onerror="this.style.display='none'">
+        <p class="image-caption">보스 전투 이미지 · <a href="https://www.famitsu.com/news/202203/07253782.html" target="_blank" rel="noopener">패미통 출처</a></p>
+        <div class="boss"><div><strong>접목의 고드릭</strong><p>공격 후 빈틈을 관찰하고, 무리한 연속 공격을 피한다.</p></div><span class="difficulty">난이도 ★★★</span></div>
+        <div class="boss"><div><strong>끔찍한 흉조 멀기트</strong><p>긴 공격 지연과 빠른 후속 공격에 주의. 회피 타이밍을 익히는 것이 중요하다.</p></div><span class="difficulty">난이도 ★★★★</span></div>
+        <div class="boss"><div><strong>트리 가드</strong><p>초반에 반드시 싸울 필요는 없다. 말을 타고 다시 도전하는 것도 방법이다.</p></div><span class="difficulty">난이도 ★★★</span></div>
+      </div>
+    </section>
+
+    <section id="checklist" class="page">
+      <div class="hero">
+        <small>FIELD CHECK · 04</small>
+        <h2>진행 체크리스트</h2>
+        <p>완료한 항목에 체크해 보자. 진행도는 이 페이지 안에서 자동으로 갱신된다. 새로고침 후에는 체크가 초기화된다.</p>
+      </div>
+      <div class="card checklist">
+        <label><input type="checkbox" class="task"> 림그레이브 지도 조각 획득</label>
+        <label><input type="checkbox" class="task"> 엘레의 교회 발견</label>
+        <label><input type="checkbox" class="task"> 영마 토렌트 획득</label>
+        <label><input type="checkbox" class="task"> 무기 한 번 이상 강화</label>
+        <label><input type="checkbox" class="task"> 흐느낌의 반도 탐험</label>
+        <label><input type="checkbox" class="task"> 스톰빌 성 지름길 발견</label>
+        <label><input type="checkbox" class="task"> 주요 보스 격파</label>
+      </div>
+    </section>
+  </main>
+</div>
+<footer>개인용 팬 가이드 예시 · 게임의 공식 공략이나 완전한 데이터베이스가 아닙니다.</footer>
+<div class="credits"><strong>이미지 출처 안내</strong><br>
+이 예시는 이미지가 있는 외부 웹사이트에서 이미지를 불러옵니다. 따라서 이미지를 표시하려면 인터넷 연결이 필요하며, 원본 사이트의 정책이나 주소 변경에 따라 표시되지 않을 수 있습니다.
+이미지의 저작권은 각 원저작자 및 권리자에게 있습니다. <a href="https://it.bandainamcoent.eu/elden-ring/elden-ring/media" target="_blank" rel="noopener">반다이 남코 공식 미디어 갤러리</a>도 참고할 수 있습니다.</div>
+
+<script>
+  const buttons = document.querySelectorAll('nav button');
+  const pages = document.querySelectorAll('.page');
+  buttons.forEach(button => button.addEventListener('click', () => {
+    buttons.forEach(b => b.classList.toggle('active', b === button));
+    pages.forEach(page => page.classList.toggle('active', page.id === button.dataset.page));
+  }));
+
+  function updateProgress() {
+    const tasks = [...document.querySelectorAll('.task')];
+    const checked = tasks.filter(task => task.checked).length;
+    const percent = tasks.length ? Math.round(checked / tasks.length * 100) : 0;
+    document.getElementById('progress').textContent = percent + '%';
+    document.querySelectorAll('.task').forEach(task => {
+      const label = task.closest('label');
+      if (label) label.classList.toggle('done', task.checked);
+    });
+  }
+  document.querySelectorAll('.task').forEach(task => task.addEventListener('change', updateProgress));
+  updateProgress();
+
+  document.getElementById('regionSearch').addEventListener('input', event => {
+    const query = event.target.value.trim().toLowerCase();
+    document.querySelectorAll('#regionCards .searchable').forEach(card => {
+      card.style.display = card.textContent.toLowerCase().includes(query) ? '' : 'none';
+    });
+  });
+</script>
+</body>
+</html>
